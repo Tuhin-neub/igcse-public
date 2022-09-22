@@ -52,6 +52,7 @@ class ChapterController extends Controller
      */
     public function store(Request $request)
     {
+        return $request->all();
         $this->validate($request, [
             'icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
             'title' => 'required|max:255|string',

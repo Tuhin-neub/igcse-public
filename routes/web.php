@@ -21,10 +21,13 @@ Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
 Route::post('/contact-us-submit', [PublicController::class, 'contact_us_submit'])->name('contact-us-submit');
 Route::get('/about', [PublicController::class, 'about_us'])->name('about');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
+Route::get('/chapter/{slug}', [PublicController::class, 'chapter'])->name('chapter');
+Route::get('/all-chapter', [PublicController::class, 'all_chapter'])->name('all-chapter');
+Route::get('/lecture/{slug}', [PublicController::class, 'lecture'])->name('lecture');
 
-Route::get('/chapter', function () {
-    return view('website.pages.chapter');
-})->name('chapter');
+// Route::get('/chapter', function () {
+//     return view('website.pages.chapter');
+// })->name('chapter');
 Route::get('/lecture', function () {
     return view('website.pages.single_lecture');
 })->name('lecture_page');
@@ -36,12 +39,12 @@ Route::get('/quiz', function () {
 Route::get('/student-login', function () {
     return view('website.pages.student_login');
 })->name('login');
-Route::get('/registration_form', function () {
-    return view('website.pages.registration_form');
-})->name('registration_form');
-Route::get('/student_dashboard', function () {
-    return view('website.pages.student_dashboard');
-})->name('student_dashboard');
+// Route::get('/registration_form', function () {
+//     return view('website.pages.registration_form');
+// })->name('registration_form');
+// Route::get('/student_dashboard', function () {
+//     return view('website.pages.student_dashboard');
+// })->name('student_dashboard');
 Route::get('/student_profile_dashboard', function () {
     return view('website.pages.student_profile_dashboard');
 })->name('student_profile_dashboard');
@@ -53,11 +56,18 @@ Route::get('/lecture', function () {
 
 
 Auth::routes();
+Route::get('/home', function() {
+    return redirect()->route('user.dashboard');
+});
 Route::group(['as'=>'user.','prefix'=>'user','middleware'=>['auth','user']], function (){
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/', function() {
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('user.dashboard');
     });
+    Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::post('/profile-update', [DashboardController::class, 'profile_update'])->name('profile-update');
+    Route::post('/password-update', [DashboardController::class, 'password_update'])->name('password-update');
+    Route::get('/quiz/{slug}', [DashboardController::class, 'quiz'])->name('quiz');
 
 });
 

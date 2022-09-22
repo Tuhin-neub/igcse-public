@@ -9,11 +9,11 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{route('chapter')}}">Chapter</a>
+                    <a class="nav-link" href="{{ route('all-chapter') }}">Chapter</a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="{{route('lecture_page')}}">Lecture</a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('about')}}">About</a>
                 </li>
@@ -22,8 +22,14 @@
                 </li>
             </ul>
             <div class="access-section">
-                <span><a href="{{route('login')}}" class="login btn btn-sm btn-outline-secondary">Login</a></span>
-                <span><a href="{{route('registration_form')}}">Sign Up</a></span>
+                @guest
+                    <span><a href="{{route('login')}}" class="login btn btn-sm btn-outline-secondary">Login</a></span>
+                    <span><a href="{{route('register')}}">Sign Up</a></span>
+                @endguest
+                @auth
+                    <span><a href="{{route('user.dashboard')}}">Dashboard</a></span>
+                @endauth
+                
             </div>
         </div>
     </div>

@@ -29,8 +29,10 @@
     <div class="chapter-div text-uppercase">
         <ul class="list-group  w-100  text-dark">
             @foreach ($chapters as $chapter)
-                <li class="list-group-item chapter-bg">
-                    <a href="single page.html" target="_blank">{{ $chapter->title }}</a>
+                <li class="list-group-item chapter-bg p-0 m-0">
+                    <a href="{{ route('chapter', ['slug' => $chapter->slug]) }}" class="d-block h-100 d-flex justify-content-center align-items-center">
+                        <span>{{ $chapter->title }}</span>
+                    </a>
                 </li>
             @endforeach
 

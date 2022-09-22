@@ -43,6 +43,41 @@ class PublicController extends Controller
         return view('website.pages.contact');
     }
 
+    public function chapter($slug)
+    {
+        return view('website.pages.chapter',
+            [
+                'from' => 'single-chapter',
+                'id' => Chapter::where('slug', $slug)->first()->id,
+                'datas' => Chapter::where('status', 1)->with('lectures')->get(),
+            ]
+        );
+    }
+
+    public function all_chapter(Type $var = null)
+    {
+        return view('website.pages.chapter',
+            [
+                'from' => 'all-chapter',
+                'id' => 0,
+                'datas' => Chapter::where('status', 1)->with('lectures')->get(),
+            ]
+        );
+    }
+
+    public function lecture($slug)
+    {
+        $lecture = Lecture::where('slug', $slug)->with('chapter')->first();
+        // return Lecture::where('id', '<', $lecture->id)->where('status', 1)->first();
+        return view('website.pages.lecture',
+            [
+                'data' => Lecture::where('slug', $slug)->with('chapter')->first(),
+                'previous' => Lecture::where('chapter_id', $lecture->chapter_id)->where('id', '<', $lecture->id)->where('status', 1)->first(),
+                'next' => Lecture::where('chapter_id', $lecture->chapter_id)->where('id', '>', $lecture->id)->where('status', 1)->first(),
+            ]
+        );
+    }
+
     public function contact_us_submit(Request $request)
     {
         $this->validate($request,[

@@ -8,57 +8,29 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6 mt-5">
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                      <h3 class="accordion-header" id="headingOne">
-                        <button class="accordion-button w-100" type="button" data-bs-toggle="collapse" data-bs-target="#chapterOne" aria-expanded="true" aria-controls="chapterOne">
-                          Chapter 1
-                        </button>
-                    </h3>
-                      <div id="chapterOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-
-                          <p style="text-align: justify;"><a href="#" target="_blank">Lecture 01</a></p>
-
-                          <p style="text-align: justify;"><a href="#" target="_blank">Lecture 02</a></p>
-
-                          <p style="text-align: justify;"><a href="#" target="_blank">Lecture 03</a></p>
-
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header" id="headingTwo">
-                          <button class="accordion-button collapsed w-100" type="button" data-bs-toggle="collapse" data-bs-target="#chapterTwo" aria-expanded="false" aria-controls="chapterTwo">
-                            Chapter 2
-                          </button>
-                        </h3>
-                        <div id="chapterTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <p style="text-align: justify;"><a href="#" target="_blank">Lecture 01</a></p>
-
-                            <p style="text-align: justify;"><a href="#" target="_blank">Lecture 02</a></p>
-                          </div>
-                        </div>
-                      </div>
-                      
-
+                  <div class="accordion" id="accordionExample">
+                    @foreach ($datas as $item)
+                       @php
+                           $c = ++$loop->index;
+                       @endphp 
                       <div class="accordion-item">
-                        <h3 class="accordion-header" id="headingTwo">
-                          <button class="accordion-button collapsed w-100" type="button" data-bs-toggle="collapse" data-bs-target="#chapterThree" aria-expanded="false" aria-controls="chapterThree">
-                            Chapter 2
+                        <h3 class="accordion-header" id="headingOne">
+                          <button class="accordion-button {{ $c == 1 && $from == 'all-chapter' ? '' : ($item->id == $id ? '' : 'collapsed') }} w-100" 
+                            type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#chapterOne" aria-expanded="{{ $c == 1 && $from == 'all-chapter' ? 'true' : ($item->id == $id ? '' : 'false') }}" aria-controls="chapterOne">
+                            {{ $item->title }}
                           </button>
                         </h3>
-                        <div id="chapterThree" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div id="chapterOne" class="accordion-collapse collapse {{ $c == 1 && $from == 'all-chapter' ? 'show' : ($item->id == $id ? 'show' : '') }}" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                           <div class="accordion-body">
-                            <p style="text-align: justify;"><a href="#" target="_blank">Lecture 01</a></p>
+                            @foreach ($item->lectures as $lecture)  
+                              <p style="text-align: justify;"><a href="{{ route('lecture', ['slug' => $lecture->slug]) }}" >{{ $lecture->title }}</a></p>
+                            @endforeach
 
-                            <p style="text-align: justify;"><a href="#" target="_blank">Lecture 02</a></p>
                           </div>
                         </div>
                       </div>
+                    @endforeach
                   </div>
             </div>
             <div class="col-3"></div>

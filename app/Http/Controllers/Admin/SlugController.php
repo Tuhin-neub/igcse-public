@@ -9,7 +9,7 @@ class SlugController extends Controller
 {
     public function making_slug($str)
     {
-        $remove = array("@", "#", "(", ")", "*", "/", " ");
+        $remove = array("@", "#", "(", ")", "[", "]", "{", "}", "*", "/", " ", "?");
         return strtolower(str_replace($remove, "-", $str)).'-'.time();
     }
 }
