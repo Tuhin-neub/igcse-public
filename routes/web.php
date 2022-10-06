@@ -6,6 +6,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -137,5 +138,10 @@ Route::group(['as'=>'admin.','prefix'=>'admin','middleware'=>['auth:admin']], fu
     //-----------------------------Subscriber MANAGEMENT START----------------------------
     Route::resource('subscriber', 'Admin\SubscriberController');
     //-----------------------------Subscriber MANAGEMENT END-----------------------------
+
+    //-----------------------------Student MANAGEMENT START----------------------------
+    Route::get('students', [StudentController::class, 'index'])->name('students.index');
+    Route::get('students/details/{id}', [StudentController::class, 'details'])->name('students.details');
+    //-----------------------------Student MANAGEMENT END-----------------------------
 
 });
