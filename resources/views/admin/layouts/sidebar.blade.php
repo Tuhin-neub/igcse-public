@@ -136,9 +136,9 @@
                     <li>
                         <a href="{{ route($url_group.'.about-us.index') }}"> About </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href=""> Mission & Vission </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="{{ route($url_group.'.contact.us') }}"> Contact Us </a>
                     </li>

@@ -74,6 +74,8 @@
                             @php
                                 $chapter_array = array();
                                 $lecture_array = array();
+                                $total_exam_given = 0;
+                                $total_percentage_got = 0;
                             @endphp
                             <tbody>
                                 @foreach ($results as $result)
@@ -92,8 +94,13 @@
                                         <td>{{ $result->lecture->chapter->title }}</td>
                                         <td>{{ $result->lecture->title }}</td>
                                         <td>{{ $result->total_correct }}/{{ $result->total_correct + $result->total_wrong }}</td>
-                                        <td></td>
-                                        <td></td>
+                                        @php
+                                            $got_percentage = ($result->total_correct/($result->total_correct + $result->total_wrong))*100;
+                                            ++$total_exam_given;
+                                            $total_percentage_got += $got_percentage;
+                                        @endphp
+                                        <td>{{ $got_percentage }}%</td>
+                                        <td><span class="badge bg-{{ $got_percentage >= 50 ? 'success' : 'danger' }}">{{ $got_percentage >= 50 ? 'Passed' : 'Failed' }}</span></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -103,6 +110,9 @@
             </div>
         </div>
     </div>
+    @php
+        $avg_percentage_got = $total_percentage_got/$total_exam_given;
+    @endphp
     @include('admin.layouts.footer')
 </div>
 @endsection
@@ -133,7 +143,7 @@
         $( document ).ready(function() {
             $('.num_of_chapter').text("{{ count($chapter_array) }}");
             $('.num_of_lecture').text("{{ count($lecture_array) }}");
-            $('.num_of_obtain').text("0");
+            $('.num_of_obtain').text("{{ $avg_percentage_got }}%");
         });
     </script>
     <!-- END PAGE LEVEL SCRIPTS -->  

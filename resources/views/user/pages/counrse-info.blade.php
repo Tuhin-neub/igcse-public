@@ -8,14 +8,23 @@
         <div class="col-md-8 col-lg-8">
             <div class="right-section">
                 <div class="card-deck">
+                    @php
+                        $total_exam_given = 0;
+                        $total_percentage_got = 0;
+                    @endphp
                     @foreach ($results as $result)
                         <div class="card">
                             <img class="card-img-top" src="{{ $result->lecture->chapter->icon ? asset('storage/'.$result->lecture->chapter->icon) : asset('no-image.png') }}" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $result->lecture->chapter->title }}</h5> <br>
                                 <span class="card-text">{{ $result->lecture->title }}</span><br>
-                                <span class="card-text">Obtained marks</span> <br>
-                                <span class="card-text">Status</span> <br>
+                                @php
+                                    $got_percentage = ($result->total_correct/($result->total_correct + $result->total_wrong))*100;
+                                    ++$total_exam_given;
+                                    $total_percentage_got += $got_percentage;
+                                @endphp
+                                <span class="card-text">Obtained Marks: {{ $got_percentage }}%</span> <br>
+                                <span class="card-text">Status: <span class="badge bg-{{ $got_percentage >= 50 ? 'success' : 'danger' }}">{{ $got_percentage >= 50 ? 'Passed' : 'Failed' }}</span></span> <br>
                             </div>
                         </div>
                     @endforeach
