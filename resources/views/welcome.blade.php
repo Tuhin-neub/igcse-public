@@ -91,9 +91,8 @@
                         <img class="card-img-top" src="{{ $thumbnail }}" alt="Card image cap">
                     @endif
                     <div class="card-body">
-                        <h5 class="card-title">{{ $lectures[$i]->title }}</h5>
-                        {{-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p> --}}
+                        <h5 class="card-title">{{ $lectures[$i]->chapter->title }}</h5>
+                        <p class="card-text">{{ $lectures[$i]->title }}</p>
                     </div>
                 </a>
             </div>
@@ -126,9 +125,8 @@
                         <img class="card-img-top" src="{{ $thumbnail }}" alt="Card image cap">
                     @endif
                     <div class="card-body">
-                        <h5 class="card-title">{{ $lectures[$i]->title }}</h5>
-                        {{-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p> --}}
+                        <h5 class="card-title">{{ $lectures[$i]->chapter->title }}</h5>
+                        <p class="card-text">{{ $lectures[$i]->title }}</p>
                     </div>
                 </a>
             </div>

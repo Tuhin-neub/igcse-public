@@ -95,7 +95,7 @@
                                         <td>{{ $result->lecture->title }}</td>
                                         <td>{{ $result->total_correct }}/{{ $result->total_correct + $result->total_wrong }}</td>
                                         @php
-                                            $got_percentage = ($result->total_correct/($result->total_correct + $result->total_wrong))*100;
+                                            $got_percentage = round((($result->total_correct/($result->total_correct + $result->total_wrong))*100), 2);
                                             ++$total_exam_given;
                                             $total_percentage_got += $got_percentage;
                                         @endphp
@@ -111,7 +111,12 @@
         </div>
     </div>
     @php
-        $avg_percentage_got = $total_percentage_got/$total_exam_given;
+        if(count($results) > 0){
+            $avg_percentage_got = round($total_percentage_got/$total_exam_given, 2);
+        }
+        else{
+            $avg_percentage_got = 0;
+        }
     @endphp
     @include('admin.layouts.footer')
 </div>
