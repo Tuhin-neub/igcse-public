@@ -41,35 +41,8 @@ Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::get('/chapter/{slug}', [PublicController::class, 'chapter'])->name('chapter');
 Route::get('/all-chapter', [PublicController::class, 'all_chapter'])->name('all-chapter');
 Route::get('/lecture/{slug}', [PublicController::class, 'lecture'])->name('lecture');
+// Route::get('/single-lecture/{slug}', [PublicController::class, 'single_lecture'])->name('single.lecture');
 
-// Route::get('/chapter', function () {
-//     return view('website.pages.chapter');
-// })->name('chapter');
-Route::get('/lecture', function () {
-    return view('website.pages.single_lecture');
-})->name('lecture_page');
-Route::get('/quiz', function () {
-    return view('website.pages.quiz');
-})->name('quiz');
-
-
-Route::get('/student-login', function () {
-    return view('website.pages.student_login');
-})->name('login');
-// Route::get('/registration_form', function () {
-//     return view('website.pages.registration_form');
-// })->name('registration_form');
-// Route::get('/student_dashboard', function () {
-//     return view('website.pages.student_dashboard');
-// })->name('student_dashboard');
-Route::get('/student_profile_dashboard', function () {
-    return view('website.pages.student_profile_dashboard');
-})->name('student_profile_dashboard');
-
-
-Route::get('/lecture', function () {
-    return view('website.pages.single_lecture');
-})->name('lecture_page');
 
 
 Auth::routes();
