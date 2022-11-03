@@ -106,6 +106,8 @@ class PublicController extends Controller
                 
             }
         }
+
+        return "here";
         
     }
 
