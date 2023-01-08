@@ -87,9 +87,10 @@ class PublicController extends Controller
             return redirect()->route('login')->with('error','Upps!! You have to login first.');
         }else {
             $result_data = Result::where('user_id', Auth::user()->id)->first();
-            if (empty($result_data) && $chapter_one_lecture_one->id != $lecture->id) {
+            if (empty($result_data) || $chapter_one_lecture_one->id != $lecture->id) {
                 return redirect()->route('lecture', ['slug' => $chapter_one_lecture_one->slug])->with('error','Upps!! You have to complete first lecture first.');
             }else {
+                return $result_data;
                 $result_lecture = Lecture::find($result_data->lecture_id);
                 $next_lecture = Lecture::where('chapter_id', $result_lecture->chapter_id)->where('id', '>', $result_lecture->id)->where('status', 1)->first();
                 if ($next_lecture->id != $lecture->id) {
