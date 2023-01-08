@@ -9,6 +9,7 @@ use App\Http\Controllers\SlugController;
 use App\Models\Chapter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use File;
 
 class ChapterController extends Controller
 {
