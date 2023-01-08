@@ -78,14 +78,20 @@ class LectureController extends Controller
             } 
             elseif($request->cover_type == 2){
                 if(request()->hasFile('file') ){
-                    $to_store_name = $slug; //give a unique name that will be the stored file name
-                    $file = $request->file('file'); // orginal file
-                    $to_store_folder_path = 'lecture-cover'; //path to store the file
-                    $type = 'store'; //store or update
-                    $old_file_path = ''; // old_file_path woulb be null or request variable
-        
-                    $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                    //declare controller top like use App\Http\Controllers\ImageController;
+
+                    // Get filename with the extension
+                    $filenameWithExt = $request->file('file')->getClientOriginalName();
+                    $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                    // Get just filename
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    // Get just ext
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    // Filename to store
+                    $image= 'lecture-cover/'.$slug.'.'.$extension;
+                    // Upload Image
+                    $path = $request->file('file')->storeAs('public', $image);
+                    // $resize = Image::make('storage/'.$image)->resize(360,200);
+                    // $resize->save();
         
                     $file = $image;
                 }
@@ -222,14 +228,26 @@ class LectureController extends Controller
             elseif($request->cover_type == 2){
                 
                 if(request()->hasFile('file') ){
-                    $to_store_name = $slug; //give a unique name that will be the stored file name
-                    $file = $request->file('file'); // orginal file
-                    $to_store_folder_path = 'lecture-cover'; //path to store the file
-                    $type = $old_data->cover_type == 2 ? 'update' : 'store'; //store or update
-                    $old_file_path = $old_data->cover_type == 2 ? $request->old_file : ''; // old_file_path woulb be null or request variable
-        
-                    $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                    //declare controller top like use App\Http\Controllers\ImageController;
+
+                    if($old_data->cover_type == 2){
+                        if(File::exists('storage/'.$request->old_file)) {
+                            unlink('storage/'.$request->old_file);
+                        }
+                    }
+    
+                    // Get filename with the extension
+                    $filenameWithExt = $request->file('file')->getClientOriginalName();
+                    $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                    // Get just filename
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    // Get just ext
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    // Filename to store
+                    $image= 'lecture-cover/'.$slug.'.'.$extension;
+                    // Upload Image
+                    $path = $request->file('file')->storeAs('public', $image);
+                    // $resize = Image::make('storage/'.$image)->resize(360,200);
+                    // $resize->save();
         
                     $file = $image;
                 }

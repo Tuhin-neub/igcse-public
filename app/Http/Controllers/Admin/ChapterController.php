@@ -65,14 +65,20 @@ class ChapterController extends Controller
 
             $icon = '';
             if(request()->hasFile('icon') ){
-                $to_store_name = $slug; //give a unique name that will be the stored file name
-                $file = $request->file('icon'); // orginal file
-                $to_store_folder_path = 'chapters-icon'; //path to store the file
-                $type = 'store'; //store or update
-                $old_file_path = ''; // old_file_path woulb be null or request variable
-    
-                $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                //declare controller top like use App\Http\Controllers\ImageController;
+
+                // Get filename with the extension
+                $filenameWithExt = $request->file('icon')->getClientOriginalName();
+                $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('icon')->getClientOriginalExtension();
+                // Filename to store
+                $image= 'chapters-icon/'.$slug.'.'.$extension;
+                // Upload Image
+                $path = $request->file('icon')->storeAs('public', $image);
+                // $resize = Image::make('storage/'.$image)->resize(360,200);
+                // $resize->save();
     
                 $icon = $image;
             }
@@ -143,14 +149,26 @@ class ChapterController extends Controller
 
             $icon = $request->old_icon;
             if(request()->hasFile('icon') ){
-                $to_store_name = $slug; //give a unique name that will be the stored file name
-                $file = $request->file('icon'); // orginal file
-                $to_store_folder_path = 'chapters-icon'; //path to store the file
-                $type = 'update'; //store or update
-                $old_file_path = $request->old_icon; // old_file_path woulb be null or request variable
-    
-                $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                //declare controller top like use App\Http\Controllers\ImageController;
+
+                if($request->old_icon){
+                    if(File::exists('storage/'.$request->old_icon)) {
+                        unlink('storage/'.$request->old_icon);
+                    }
+                }
+
+                // Get filename with the extension
+                $filenameWithExt = $request->file('icon')->getClientOriginalName();
+                $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('icon')->getClientOriginalExtension();
+                // Filename to store
+                $image= 'chapters-icon/'.$slug.'.'.$extension;
+                // Upload Image
+                $path = $request->file('icon')->storeAs('public', $image);
+                // $resize = Image::make('storage/'.$image)->resize(360,200);
+                // $resize->save();
     
                 $icon = $image;
             }

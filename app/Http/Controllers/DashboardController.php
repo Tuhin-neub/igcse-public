@@ -64,15 +64,27 @@ class DashboardController extends Controller
 
             $avatar = $request->old_avatar;
             if(request()->hasFile('avatar') ){
-                // return $request->file('avatar');
-                $to_store_name = 'avatar-'.time(); //give a unique name that will be the stored file name
-                $file = $request->file('avatar'); // orginal file
-                $to_store_folder_path = 'user/avatar'; //path to store the file
-                $type = 'update'; //store or update
-                $old_file_path = $request->old_avatar; // old_file_path woulb be null or request variable
-    
-                $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                //declare controller top like use App\Http\Controllers\ImageController;
+
+                if($request->old_avatar){
+                    if(File::exists('storage/'.$request->old_avatar)) {
+                        unlink('storage/'.$request->old_avatar);
+                    }
+                }
+
+                $slug = $to_store_name = app('App\Http\Controllers\Admin\SlugController')->making_slug($request->system_name);
+                // Get filename with the extension
+                $filenameWithExt = $request->file('avatar')->getClientOriginalName();
+                $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('avatar')->getClientOriginalExtension();
+                // Filename to store
+                $image= 'user/avatar/'.$slug.'.'.$extension;
+                // Upload Image
+                $path = $request->file('avatar')->storeAs('public', $image);
+                // $resize = Image::make('storage/'.$image)->resize(360,200);
+                // $resize->save();
     
                 $avatar = $image;
             }

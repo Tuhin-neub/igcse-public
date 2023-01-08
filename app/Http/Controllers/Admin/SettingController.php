@@ -35,14 +35,27 @@ class SettingController extends Controller
 
             $system_logo = $request->old_system_logo;
             if(request()->hasFile('system_logo') ){
-                $to_store_name = app('App\Http\Controllers\Admin\SlugController')->making_slug($request->system_name); //give a unique name that will be the stored file name
-                $file = $request->file('system_logo'); // orginal file
-                $to_store_folder_path = 'system-info'; //path to store the file
-                $type = 'update'; //store or update
-                $old_file_path = $request->old_system_logo; // old_file_path woulb be null or request variable
-    
-                $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                //declare controller top like use App\Http\Controllers\ImageController;
+
+                if($request->old_system_logo){
+                    if(File::exists('storage/'.$request->old_system_logo)) {
+                        unlink('storage/'.$request->old_system_logo);
+                    }
+                }
+
+                $slug = $to_store_name = app('App\Http\Controllers\Admin\SlugController')->making_slug($request->system_name);
+                // Get filename with the extension
+                $filenameWithExt = $request->file('system_logo')->getClientOriginalName();
+                $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('system_logo')->getClientOriginalExtension();
+                // Filename to store
+                $image= 'system-info/'.$slug.'.'.$extension;
+                // Upload Image
+                $path = $request->file('system_logo')->storeAs('public', $image);
+                // $resize = Image::make('storage/'.$image)->resize(360,200);
+                // $resize->save();
     
                 $system_logo = $image;
             }
