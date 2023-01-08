@@ -54,17 +54,31 @@ class AboutController extends Controller
 
             $image = empty($data) ? '' : $data->image;
             if(request()->hasFile('image') ){
-                $to_store_name = $slug; //give a unique name that will be the stored file name
-                $file = $request->file('image'); // orginal file
-                $to_store_folder_path = 'about-us'; //path to store the file
-                $type = empty($data) ? 'store' : 'update'; //store or update
-                $old_file_path = empty($data) ? '' : $data->image; // old_file_path woulb be null or request variable
     
-                $image = app('App\Http\Controllers\Admin\ImageController')->image($to_store_name, $file, $to_store_folder_path, $type, $old_file_path); 
-                //declare controller top like use App\Http\Controllers\ImageController;
+                if (!empty($data)) {
+                    if(File::exists('storage/'.$data->image)) {
+                        unlink('storage/'.$data->image);
+                    }
+                }
+
+                // Get filename with the extension
+                $filenameWithExt = $request->file('image')->getClientOriginalName();
+                $filenameWithExt = str_replace(' ', '', $filenameWithExt);
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('image')->getClientOriginalExtension();
+                // Filename to store
+                $image= 'about-us/'.$slug.'.'.$extension;
+                // Upload Image
+                $path = $request->file('image')->storeAs('public', $image);
+                // $resize = Image::make('storage/'.$image)->resize(360,200);
+                // $resize->save();
     
                 $image = $image;
             }
+
+            
 
             $data = empty($data) ? new AboutUs : AboutUs::first();
             $data->image = $image;
